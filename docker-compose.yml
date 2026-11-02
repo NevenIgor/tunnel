@@ -55,7 +55,7 @@ services:
         max-file: "3"
 
   xray:
-    image: ${XRAY_IMAGE:-ghcr.io/xtls/xray-core:25.9.8}
+    image: ${XRAY_IMAGE:-ghcr.io/xtls/xray-core:1.8.23}
     container_name: vpn-xray
     restart: unless-stopped
     networks: [frontend]

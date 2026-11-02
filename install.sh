@@ -137,6 +137,13 @@ if [[ ! -f nginx/certs/fullchain.pem ]]; then
 fi
 
 bash scripts/render-configs.sh
+# Pre-pull images one by one: a missing/bad tag in .env (e.g. XRAY_IMAGE)
+# then points at the exact variable instead of failing with a generic error.
+for _svc in xray nginx certbot; do
+  if ! dc pull --quiet "${_svc}"; then
+    die "failed to pull image for service '${_svc}' — check the corresponding *_IMAGE variable in .env (tag must exist on the registry)"
+  fi
+done
 dc up -d
 info "stack started (bootstrap mode); waiting for nginx to accept ACME requests"
 sleep 3
