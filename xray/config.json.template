@@ -1,0 +1,76 @@
+{
+  "_comment": [
+    "Xray-core configuration TEMPLATE - rendered by scripts/render-configs.sh",
+    "into xray/config.json (gitignored). NEVER edit config.json by hand;",
+    "edit this template or xray/users.json instead.",
+    "Placeholders substituted at render time:",
+    "  ${XRAY_INTERNAL_PORT} - port inside the docker network (never published)",
+    "  ${HIDDEN_PATH}        - websocket path, e.g. /api/v1/xxxxxxxx/stream",
+    "  ${HOST}               - Host header nginx forwards (= DOMAIN)",
+    "  ${PROTOCOL}           - vless | trojan (selected profile)",
+    "  ${PASSWORD}           - trojan-only shared password ('unused' for vless)",
+    "  ${USERS_JSON}         - 'clients' array rendered from users.json",
+    "  ${LOG_LEVEL}          - warning (default) | error | none",
+    "This file uses strict JSON (no // comments) so jq can validate it."
+  ],
+
+  "log": {
+    "_comment": "At warning/error Xray writes no UUIDs or payload data to logs. Raise loglevel to 'info' only briefly while debugging.",
+    "access": "/mnt/logs/access.log",
+    "error": "/mnt/logs/error.log",
+    "loglevel": "${LOG_LEVEL}"
+  },
+
+  "policy": {
+    "levels": {
+      "0": { "handshake": 10, "connIdle": 300 }
+    }
+  },
+
+  "inbounds": [
+    {
+      "_comment": "Main proxy inbound. Binds all interfaces INSIDE the container; docker-compose never publishes this port, so only the nginx container on the internal network can reach it.",
+      "listen": "0.0.0.0",
+      "port": ${XRAY_INTERNAL_PORT},
+      "protocol": "${PROTOCOL}",
+      "settings": {
+        "clients": ${USERS_JSON},
+        "decryption": "none",
+        "password": "${PASSWORD}"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "${HIDDEN_PATH}",
+          "host": "${HOST}",
+          "headers": {}
+        }
+      }
+    }
+  ],
+
+  "outbounds": [
+    {
+      "_comment": "Direct internet access for proxied traffic.",
+      "protocol": "freedom",
+      "tag": "direct"
+    },
+    {
+      "_comment": "Private/loopback destinations are blackholed: protects the docker network and host from SSRF-style probing through the proxy.",
+      "protocol": "blackhole",
+      "tag": "block"
+    }
+  ],
+
+  "routing": {
+    "domainStrategy": "IPOnDemand",
+    "rules": [
+      {
+        "type": "field",
+        "ip": ["geoip:private"],
+        "outboundTag": "block"
+      }
+    ]
+  }
+}

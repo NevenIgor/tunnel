@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — Northwind Studio</title>
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    body { margin:0; font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif; color:#1c2333; background:#f7f8fa; line-height:1.6; }
+    header { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#fff; border-bottom:1px solid #e4e7ec; }
+    nav a { color:#5b6472; text-decoration:none; margin-left:1.5rem; }
+    main { max-width:720px; margin:0 auto; padding:3rem 2rem; }
+    footer { text-align:center; color:#5b6472; padding:2rem; font-size:.9rem; }
+    label { display:block; margin-top:1rem; }
+    input, textarea { width:100%; padding:.5rem; border:1px solid #cbd2dc; border-radius:6px; }
+    button { margin-top:1.2rem; background:#2f6fed; color:#fff; border:0; padding:.6rem 1.4rem; border-radius:8px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong><a href="/" style="color:inherit;text-decoration:none">Northwind Studio</a></strong>
+    <nav><a href="/">Home</a><a href="/about.html">About</a><a href="/services.html">Services</a><a href="/contact.html">Contact</a></nav>
+  </header>
+  <main>
+    <h1>Contact</h1>
+    <p>Email us at <a href="mailto:hello@northwind.example">hello@northwind.example</a> or use the form below.</p>
+    <form action="#" method="post">
+      <label>Name <input type="text" name="name" required></label>
+      <label>Email <input type="email" name="email" required></label>
+      <label>Message <textarea name="message" rows="5"></textarea></label>
+      <button type="submit">Send</button>
+    </form>
+  </main>
+  <footer>&copy; 2026 Northwind Studio</footer>
+</body>
+</html>

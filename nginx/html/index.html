@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northwind Studio — Design &amp; Development</title>
+  <meta name="description" content="Northwind Studio is a small independent design and development practice.">
+  <link rel="icon" href="/favicon.ico">
+  <style>
+    :root { --ink:#1c2333; --muted:#5b6472; --accent:#2f6fed; --bg:#f7f8fa; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+           color:var(--ink); background:var(--bg); line-height:1.6; }
+    header { display:flex; justify-content:space-between; align-items:center;
+             padding:1rem 2rem; background:#fff; border-bottom:1px solid #e4e7ec; }
+    nav a { color:var(--muted); text-decoration:none; margin-left:1.5rem; }
+    nav a:hover { color:var(--accent); }
+    main { max-width:880px; margin:0 auto; padding:3rem 2rem; }
+    h1 { font-size:2.2rem; margin-bottom:.5rem; }
+    .lead { color:var(--muted); font-size:1.1rem; }
+    .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.2rem; margin-top:2rem; }
+    .card { background:#fff; border:1px solid #e4e7ec; border-radius:10px; padding:1.2rem; }
+    footer { text-align:center; color:var(--muted); padding:2rem; font-size:.9rem; }
+    a.btn { display:inline-block; margin-top:1.5rem; background:var(--accent); color:#fff;
+            padding:.6rem 1.2rem; border-radius:8px; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Northwind Studio</strong>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/about.html">About</a>
+      <a href="/services.html">Services</a>
+      <a href="/contact.html">Contact</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Small studio. Careful craft.</h1>
+    <p class="lead">We design and build fast, accessible websites and internal tools for
+    libraries, archives and independent publishers.</p>
+    <div class="cards">
+      <div class="card"><h3>Digital collections</h3><p>Searchable archives with clean metadata and calm interfaces.</p></div>
+      <div class="card"><h3>Editorial tools</h3><p>Publishing pipelines that keep writers out of spreadsheets.</p></div>
+      <div class="card"><h3>Performance</h3><p>Sites that load in under a second, even on modest hardware.</p></div>
+    </div>
+    <a class="btn" href="/contact.html">Get in touch</a>
+  </main>
+  <footer>&copy; 2026 Northwind Studio · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy</a></footer>
+</body>
+</html>
