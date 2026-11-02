@@ -284,7 +284,7 @@ cp .env.example .env && chmod 600 .env   # install.sh делает это сам
 | `TROJAN_PASSWORD` | *(генерируется для trojan)* | Пароль, если `PROFILE=trojan` |
 | `XRAY_INTERNAL_PORT` | `10000` | Порт Xray внутри docker-сети |
 | `NETWORK_NAME` | `vpn-frontend` | Имя docker-сети |
-| `NGINX_IMAGE` / `XRAY_IMAGE` / `CERTBOT_IMAGE` | pinned теги | Закреплённые образы (менять через `update.sh --to`) |
+| `NGINX_IMAGE` / `XRAY_IMAGE` / `CERTBOT_IMAGE` | pinned теги | Закреплённые образы (менять через `update.sh --to`). Теги должны реально существовать в реестре: у `ghcr.io/xtls/xray-core` они вида `1.8.23` / `latest` / `main` — тегов формата `YY.M.DD` (например `25.9.8`) там нет, и `docker pull` такой образ не найдёт |
 | `BACKUP_DIR` | `./backups` | Куда писать резервные копии |
 | `LOG_LEVEL` | `warning` | Уровень логов Xray |
 
@@ -296,6 +296,7 @@ cp .env.example .env && chmod 600 .env   # install.sh делает это сам
 
 | Симптом | Причина / решение |
 |---|---|
+| `failed to resolve reference "...xray-core...": not found`, а nginx/certbot показаны как `Interrupted` | В `.env` (`XRAY_IMAGE`/`NGINX_IMAGE`/`CERTBOT_IMAGE`) указан несуществующий тег: docker не может подтянуть один образ и отменяет остальные. Проверьте тег в реестре (для xray-core — github.com/XTLS/Xray-core/releases, формат `1.8.x`) и исправьте в `.env`; значения по умолчанию в `.env.example` уже корректны. Если `.env` создан из старого шаблона: `sed -i 's|^XRAY_IMAGE=.*|XRAY_IMAGE=ghcr.io/xtls/xray-core:1.8.23|' .env && ./manage.sh reload` |
 | Ошибка выпуска сертификата | `dig +short $DOMAIN` должен возвращать IP этого сервера; входящий TCP 80 не закрыт фаерволом/панелью облака; сработали лимиты LE → `--staging`. Подробности: `docker volume inspect vpn-docker_certbot-logs` или `tail backups/renew.log` |
 | `port 80 is occupied` | Другой сервис (apache/nginx/host) занял порт — освободите его или поменяйте `HTTP_PORT/HTTPS_PORT` в `.env` и переустановите |
 | Клиент не подключается | Проверьте `./manage.sh status` и `bash scripts/healthcheck.sh`; убедитесь, что используете актуальную ссылку (после `rotate-user`/смены `HIDDEN_PATH` старые ссылки мертвы); проверьте, что пользователь `enabled:true` в `list-users` |
