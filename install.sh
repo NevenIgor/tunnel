@@ -137,6 +137,18 @@ if [[ ! -f nginx/certs/fullchain.pem ]]; then
 fi
 
 bash scripts/render-configs.sh
+# Validate pinned image tags BEFORE pulling: an existing .env may still carry
+# a stale/invalid tag from an older template (compose silently reuses it).
+# NOTE: read the vars straight from .env — install.sh does not source it.
+_bad_xray="25.9.8"
+while IFS='=' read -r _k _v; do
+  [[ "${_k}" == *_IMAGE ]] || continue
+  case "${_v}" in
+    *"${_bad_xray}"*)
+      info "${_k} points to non-existent tag ${_v} — resetting XRAY_IMAGE to ghcr.io/xtls/xray-core:1.8.23"
+      sed -i "s|^${_k}=.*|${_k}=ghcr.io/xtls/xray-core:1.8.23|" .env ;;
+  esac
+done < .env
 # Pre-pull images one by one: a missing/bad tag in .env (e.g. XRAY_IMAGE)
 # then points at the exact variable instead of failing with a generic error.
 for _svc in xray nginx certbot; do
